@@ -27,6 +27,7 @@ WORK_DIR="${BUILD_DIR}/work"
 ISO_DIR="${BUILD_DIR}/iso"
 ROOTFS_DIR="${BUILD_DIR}/rootfs"
 OUTPUT_DIR="$(pwd)/release"
+KERNEL_OUTPUT_DIR="${OUTPUT_DIR}/vmlinuz"
 
 echo -e "${BLUE}╔════════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║     TL Linux ISO Builder v${TL_VERSION}        ║${NC}"
@@ -113,7 +114,7 @@ fi
 
 # Create directory structure
 echo -e "${YELLOW}[3/8]${NC} Creating build directories..."
-mkdir -p "$BUILD_DIR" "$WORK_DIR" "$ISO_DIR" "$ROOTFS_DIR" "$OUTPUT_DIR"
+mkdir -p "$BUILD_DIR" "$WORK_DIR" "$ISO_DIR" "$ROOTFS_DIR" "$OUTPUT_DIR" "$KERNEL_OUTPUT_DIR"
 echo -e "${GREEN}✓ Directories created${NC}"
 
 # Bootstrap base system
@@ -461,9 +462,14 @@ mksquashfs "$ROOTFS_DIR" "${ISO_DIR}/live/filesystem.squashfs" \
 echo -e "${GREEN}✓ Filesystem compressed${NC}"
 
 # Copy kernel and initrd
-echo "  Copying kernel and initrd..."
+echo "  Copying kernel and initrd to ISO..."
 cp "${ROOTFS_DIR}/boot"/vmlinuz-* "${ISO_DIR}/live/vmlinuz"
 cp "${ROOTFS_DIR}/boot"/initrd.img-* "${ISO_DIR}/live/initrd"
+
+echo "  Copying kernel and initrd to output folder..."
+cp "${ROOTFS_DIR}/boot"/vmlinuz-* "${KERNEL_OUTPUT_DIR}/vmlinuz"
+cp "${ROOTFS_DIR}/boot"/initrd.img-* "${KERNEL_OUTPUT_DIR}/initrd.img"
+echo "  ✓ Kernel files available at: ${KERNEL_OUTPUT_DIR}"
 
 # Copy ISOLINUX bootloader files for BIOS
 echo "  Copying ISOLINUX bootloader..."
@@ -653,6 +659,8 @@ echo ""
 echo -e "${BLUE}ISO File:${NC}     ${OUTPUT_DIR}/${ISO_NAME}"
 echo -e "${BLUE}Size:${NC}         ${ISO_SIZE}"
 echo -e "${BLUE}SHA256:${NC}       $(cat ${ISO_NAME}.sha256 | cut -d' ' -f1)"
+echo -e "${BLUE}Kernel:${NC}       ${KERNEL_OUTPUT_DIR}/vmlinuz"
+echo -e "${BLUE}Initrd:${NC}       ${KERNEL_OUTPUT_DIR}/initrd.img"
 echo ""
 echo -e "${YELLOW}Next Steps:${NC}"
 echo "  1. Test the ISO in a virtual machine (VirtualBox, VMware, QEMU)"
