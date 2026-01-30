@@ -687,6 +687,118 @@ class TimeLordBrowser {
         });
     }
 
+    // Dashboard Panel
+    openDashboard() {
+        document.getElementById('dashboardPanel').classList.add('open');
+        this.updateDashboardStats();
+        this.showToast('Dashboard opened', 'info');
+    }
+
+    closeDashboard() {
+        document.getElementById('dashboardPanel').classList.remove('open');
+    }
+
+    updateDashboardStats() {
+        // Update bookmarks count
+        this.db.getBookmarks().then(bookmarks => {
+            document.getElementById('statBookmarks').textContent = bookmarks.length;
+        });
+
+        // Update history count
+        this.db.getHistory().then(history => {
+            document.getElementById('statHistory').textContent = history.length;
+        });
+
+        // Update downloads count
+        const downloads = JSON.parse(localStorage.getItem('timelord_downloads') || '[]');
+        document.getElementById('statDownloads').textContent = downloads.length;
+
+        // Update active tabs count
+        document.getElementById('statTabs').textContent = this.tabs.length;
+    }
+
+    filterDashboard(searchTerm) {
+        const categories = document.querySelectorAll('.dashboard-category');
+        const featureCards = document.querySelectorAll('.feature-card');
+        const searchLower = searchTerm.toLowerCase();
+
+        if (!searchTerm) {
+            // Show all categories and cards
+            categories.forEach(category => category.classList.remove('hidden'));
+            featureCards.forEach(card => card.classList.remove('hidden'));
+            return;
+        }
+
+        // Filter feature cards
+        featureCards.forEach(card => {
+            const name = card.querySelector('.feature-name').textContent.toLowerCase();
+            const desc = card.querySelector('.feature-desc').textContent.toLowerCase();
+
+            if (name.includes(searchLower) || desc.includes(searchLower)) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        // Hide/show categories based on visible cards
+        categories.forEach(category => {
+            const visibleCards = category.querySelectorAll('.feature-card:not(.hidden)');
+            if (visibleCards.length > 0) {
+                category.classList.remove('hidden');
+            } else {
+                category.classList.add('hidden');
+            }
+        });
+    }
+
+    handleFeatureCardClick(feature) {
+        this.closeDashboard();
+
+        const featureActions = {
+            'editors': () => this.openEditors(),
+            'coderunner': () => this.openCodeRunner(),
+            'tabgroups': () => this.openTabGroups(),
+            'filemanager': () => this.openFileManager(),
+            'downloads': () => this.openDownloadManager(),
+            'bluedrop': () => this.openBlueDrop(),
+            'qrcode': () => this.showQRCode(),
+            'splitview': () => this.toggleSplitView(),
+            'reading': () => this.enableReadingMode(),
+            'adblocker': () => this.openAdBlocker(),
+            'archives': () => this.openArchives(),
+            'bookmarks': () => this.openSidebar('bookmarks'),
+            'history': () => this.openSidebar('history'),
+            'screenshot': () => this.takeScreenshot(),
+            'encryption': () => {
+                document.getElementById('settingsBtn').click();
+                setTimeout(() => {
+                    const encryptionSection = document.querySelector('.setting-group h3');
+                    if (encryptionSection && encryptionSection.textContent.includes('Encryption')) {
+                        encryptionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
+            }
+        };
+
+        const action = featureActions[feature];
+        if (action) {
+            action();
+        }
+    }
+
+    // Editors Panel
+    openEditors() {
+        document.getElementById('editorsPanel').classList.add('open');
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('archivesPanel').classList.remove('open');
+        this.showToast('Document Editor opened', 'info');
+    }
+
+    closeEditors() {
+        document.getElementById('editorsPanel').classList.remove('open');
+    }
+
     // Event Listeners
     setupEventListeners() {
         // New Tab
@@ -755,6 +867,53 @@ class TimeLordBrowser {
         // Archives search functionality
         document.getElementById('archivesSearch').addEventListener('input', (e) => {
             this.filterArchives(e.target.value);
+        });
+
+        // Archive links navigation within browser
+        document.addEventListener('click', (e) => {
+            const archiveLink = e.target.closest('.archive-link[data-navigate="true"]');
+            if (archiveLink) {
+                e.preventDefault();
+                const url = archiveLink.getAttribute('href');
+                if (url) {
+                    this.navigateTab(this.activeTabId, url);
+                    this.closeArchives();
+                }
+            }
+        });
+
+        // Dashboard
+        document.getElementById('dashboardBtn').addEventListener('click', () => {
+            this.openDashboard();
+        });
+
+        document.getElementById('closeDashboard').addEventListener('click', () => {
+            this.closeDashboard();
+        });
+
+        // Dashboard search functionality
+        document.getElementById('dashboardSearch').addEventListener('input', (e) => {
+            this.filterDashboard(e.target.value);
+        });
+
+        // Feature card clicks
+        document.addEventListener('click', (e) => {
+            const featureCard = e.target.closest('.feature-card');
+            if (featureCard) {
+                const feature = featureCard.getAttribute('data-feature');
+                if (feature) {
+                    this.handleFeatureCardClick(feature);
+                }
+            }
+        });
+
+        // Editors
+        document.getElementById('editorsBtn').addEventListener('click', () => {
+            this.openEditors();
+        });
+
+        document.getElementById('closeEditors').addEventListener('click', () => {
+            this.closeEditors();
         });
 
         // Settings

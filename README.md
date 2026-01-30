@@ -2,7 +2,7 @@
 
 A lightweight, feature-rich Progressive Web App (PWA) browser built with vanilla JavaScript. Experience fast, modern browsing with offline capabilities, Bluetooth file sharing, cloud file management, code execution VM, split-screen browsing, and a clean, intuitive interface.
 
-![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![PWA](https://img.shields.io/badge/PWA-enabled-orange.svg)
 ![Bluetooth](https://img.shields.io/badge/Bluetooth-enabled-blue.svg)
@@ -23,25 +23,120 @@ A lightweight, feature-rich Progressive Web App (PWA) browser built with vanilla
 - **Persistent Storage**: All data stored locally using IndexedDB
 
 ### Free Internet Archives 📚
-Quick access to a curated collection of free internet archives and resources.
+Quick access to a curated collection of free internet archives that work seamlessly within the browser.
 
-#### Categories:
-- **🌐 Web Archives**: Internet Archive, Wayback Machine, Archive.today
-- **📖 Books & Literature**: Project Gutenberg (70,000+ free eBooks), Open Library, Standard Ebooks
-- **🎓 Academic & Research**: Google Scholar, arXiv, PubMed Central, CORE, BASE, DOAJ
-- **🎬 Media & Entertainment**: Internet Archive Movies, Wikimedia Commons, Library of Congress
-- **🎵 Music & Audio**: Internet Archive Audio, Free Music Archive, Musopen
-- **💾 Software & Games**: Internet Archive Software, GitHub, My Abandonware
-- **🎓 Educational Resources**: Khan Academy, Coursera, edX, MIT OpenCourseWare
-- **📰 News & Magazines**: Internet Archive Magazines, Chronicling America
-- **📊 Data & Statistics**: Data.gov, Kaggle Datasets, Our World in Data
+#### Categories (16 Working Archives):
+- **🌐 Web Archives** (2): Internet Archive, Wayback Machine
+- **📖 Books & Literature** (3): Project Gutenberg (70,000+ free eBooks), Open Library, FadedPage
+- **🎓 Academic & Research** (3): CORE, BASE, DOAJ
+- **🎬 Media & Entertainment** (2): Internet Archive Movies, Wikimedia Commons
+- **🎵 Music & Audio** (1): Internet Archive Audio
+- **💾 Software & Games** (2): Internet Archive Software, My Abandonware
+- **🎓 Educational Resources** (1): MIT OpenCourseWare
+- **📰 News & Magazines** (1): Internet Archive Magazines
+- **📊 Data & Statistics** (1): Our World in Data
 
 #### Features:
-- **45+ Curated Resources**: Handpicked quality archives
+- **16 Verified Archives**: All tested to work within the browser
 - **Category Organization**: Browse by type (books, academic, media, etc.)
 - **Real-time Search**: Filter archives by name, description, or category
-- **Direct Access**: One-click access to any archive
+- **In-Browser Navigation**: All archives open within TimeLord Browser
 - **Responsive Design**: Mobile-friendly archive browser
+- **No External Tabs**: Everything stays within your browsing context
+
+**Note**: Only archives that load properly within iframes are included. Sites with X-Frame-Options restrictions have been removed for a better user experience.
+
+### Document Editors 📝
+Comprehensive multi-format document editor with save/load capabilities and live preview.
+
+#### Supported Formats:
+- **Plain Text** (.txt) - Basic text editing
+- **Markdown** (.md) - Markdown with live preview
+- **HTML** (.html) - HTML editing with live preview
+- **CSS** (.css) - CSS stylesheets
+- **JavaScript** (.js) - JavaScript code
+- **JSON** (.json) - JSON data files
+- **XML** (.xml) - XML documents
+- **CSV** (.csv) - Comma-separated values
+- **Python** (.py) - Python scripts
+- **Java** (.java) - Java code
+- **C++** (.cpp) - C++ code
+- **SQL** (.sql) - SQL queries
+
+#### Core Features:
+- **Multi-Format Support**: 12 different document types
+- **Syntax-Aware**: Templates and placeholders for each format
+- **File Operations**: New, Load, Save, Download
+- **Live Statistics**: Real-time line, word, and character counts
+- **Live Preview**: HTML and Markdown rendering
+- **Auto-Save**: Documents saved to browser storage
+- **Tab Key Support**: Proper indentation (4 spaces)
+- **Keyboard Shortcuts**: Ctrl/Cmd+S to save
+
+#### How to Use the Editor:
+
+**Opening the Editor:**
+1. Click the Editors button (📝) in the navigation bar
+2. The editor panel slides in from the right
+3. Select your document type from the dropdown
+
+**Creating a New Document:**
+1. Click "🆕 New" button
+2. Select document type from dropdown
+3. Filename automatically updates with correct extension
+4. Start typing in the editor
+
+**Loading a Document:**
+1. Click "📂 Load" button
+2. Select a file from your computer
+3. Document type auto-detected from file extension
+4. Content appears in editor
+
+**Saving a Document:**
+1. Enter filename (or use auto-generated name)
+2. Click "💾 Save" to save to browser storage
+3. Click "⬇️ Download" to save to your computer
+4. Use Ctrl/Cmd+S keyboard shortcut for quick save
+
+**Using Live Preview:**
+- Available for HTML and Markdown files
+- Click "👁️ Preview" to toggle preview panel
+- Preview updates automatically as you type
+- See rendered output in real-time
+
+#### Document Statistics:
+The editor displays real-time statistics:
+- **Lines**: Total number of lines
+- **Words**: Word count
+- **Characters**: Character count
+
+#### File Templates:
+Each document type includes helpful templates:
+- **HTML**: Complete HTML5 boilerplate
+- **Java**: Main class structure
+- **C++**: Include statements and main function
+- **XML**: XML declaration and root element
+- **SQL**: Comment header
+- **And more...**
+
+#### Storage:
+- **Browser Storage**: Documents saved in localStorage
+- **Persistent**: Saved documents persist across sessions
+- **Multiple Documents**: Save and manage multiple files
+- **Auto-Recovery**: Documents retained even if browser closes
+
+#### Keyboard Shortcuts:
+- `Ctrl/Cmd + S` - Save document
+- `Tab` - Insert 4 spaces (proper indentation)
+- `Enter` - New line
+
+#### Tips:
+- Change document type anytime from dropdown
+- Filename auto-updates with correct extension
+- Use "Download" to save to your computer
+- Use "Save" to keep in browser for later editing
+- Preview updates automatically for HTML/Markdown
+- All saved documents available for future editing
 
 ### BlueDrop - Wireless Sharing
 - **Bluetooth Sharing**: Share files, links, and text via Web Bluetooth API
@@ -384,20 +479,13 @@ Block ads and trackers for faster, cleaner browsing.
 **🌐 Web Archives**
 - Internet Archive - Digital library with millions of free resources
 - Wayback Machine - Browse 800+ billion archived web pages
-- Archive.today - Create permanent snapshots of web pages
-- Archive of Our Own - Fanfiction and creative works
 
 **📖 Books & Literature**
 - Project Gutenberg - 70,000+ free eBooks in public domain
 - Open Library - Millions of books to borrow and read
-- Standard Ebooks - High-quality formatted public domain ebooks
 - FadedPage - Canadian public domain eBooks
-- ManyBooks - 50,000+ free ebooks in multiple formats
 
 **🎓 Academic & Research**
-- Google Scholar - Search scholarly literature across disciplines
-- arXiv - 2M+ open access research papers (physics, math, CS, etc.)
-- PubMed Central - Free biomedical and life sciences research
 - CORE - Millions of open access research papers
 - BASE - Bielefeld Academic Search Engine
 - DOAJ - Directory of Open Access Journals (18,000+ journals)
@@ -405,39 +493,29 @@ Block ads and trackers for faster, cleaner browsing.
 **🎬 Media & Entertainment**
 - Internet Archive Movies - Classic films and documentaries
 - Wikimedia Commons - 90M+ free media files
-- Library of Congress - Historical media and documents
-- Europeana - European cultural heritage collections
 
 **🎵 Music & Audio**
 - Internet Archive Audio - Free music, podcasts, and recordings
-- Free Music Archive - High-quality, legal audio downloads
-- Musopen - Free classical music recordings and sheet music
 
 **💾 Software & Games**
 - Internet Archive Software - Historical software preservation
-- GitHub - World's largest open source code repository
 - My Abandonware - Classic PC games (abandonware)
 
 **🎓 Educational Resources**
-- Khan Academy - Free online courses and lessons for all ages
-- Coursera - University courses (many free to audit)
-- edX - University-level online courses
 - MIT OpenCourseWare - Free MIT course materials
 
 **📰 News & Magazines**
 - Internet Archive Magazines - Historical magazine collections
-- Chronicling America - Historic American newspapers (1777-1963)
 
 **📊 Data & Statistics**
-- Data.gov - US government open data portal
-- Kaggle Datasets - Public datasets for data science
 - Our World in Data - Research and data on global issues
 
 **Tips:**
-- All links open in new tabs to preserve your browsing
+- All links open within TimeLord Browser
 - Use search to quickly find specific resources
 - Archives are organized by content type for easy browsing
-- Most resources are completely free with no registration required
+- All included archives are tested to work within the browser
+- No X-Frame-Options restrictions
 
 ### End-to-End Encryption 🔒
 Protect your browsing data from host browser collection using military-grade encryption.
@@ -577,6 +655,7 @@ TimeLordHorus/
 ├── splitview.js        # Split view manager
 ├── downloadmanager.js  # Download Manager with progress tracking
 ├── advancedtools.js    # Advanced tools (Tab Groups, Reading Mode, etc.)
+├── documenteditor.js   # Multi-format document editor with save/load
 ├── manifest.json       # PWA manifest
 ├── sw.js               # Service worker
 ├── .gitignore          # Git ignore configuration
