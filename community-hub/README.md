@@ -73,7 +73,9 @@ Create a `.env` file in `community-hub/`:
 PORT=3737
 JWT_SECRET=your-secret-key-change-this-in-production
 DB_PATH=./data/community.db
-CORS_ORIGIN=*
+# Set CORS_ORIGIN to allow cross-origin requests (e.g. if hosting frontend separately).
+# Leave unset to enforce same-origin policy (recommended for production).
+CORS_ORIGIN=
 ```
 
 > **Important:** Always set a strong `JWT_SECRET` in production.
@@ -207,6 +209,8 @@ community-hub/
 - Messaging restricted by role-pair rules (no arbitrary DMs)
 - All transactions are internal — no external payment routing
 - Input escaping on all frontend output
+- **Rate limiting**: auth endpoints limited to 20 requests/15 min; all API endpoints limited to 120 req/min
+- **CORS**: defaults to same-origin only; set `CORS_ORIGIN` env var only when hosting frontend separately
 
 ---
 
