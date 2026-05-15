@@ -66,6 +66,7 @@ def show_menu():
         print("    7. 🔄 Run Onboarding Again")
         print("    8. 🎨 Theme Preview")
         print("    9. 📦 Install Compatibility Tools")
+        print("   10. ✨ Spark App")
         print("    0. 🚪 Exit")
         print("\n" + "=" * 60)
 
@@ -89,6 +90,8 @@ def show_menu():
             show_themes()
         elif choice == '9':
             install_compatibility()
+        elif choice == '10':
+            launch_app('apps/spark_app.py')
         elif choice == '0':
             print("\n  👋 Thanks for using TL Linux!\n")
             sys.exit(0)
