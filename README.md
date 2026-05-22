@@ -56,6 +56,13 @@ Quick access to a curated collection of free internet archives and resources.
 - **Custom Homepage**: Set your preferred homepage URL
 - **Search Engine Selection**: Choose from Google, DuckDuckGo, Bing, or Brave Search
 
+### Revenue Engine Simulator 🪙
+- **Clock Trigger Revenue**: Every time the second hand hits `9, 19, 29, 39, 49, 59`, the engine adds **$0.10**
+- **Tripling Growth Model**: Growth balance compounds by **3x** each configured interval
+- **Combined Wealth Streams**: Total wealth tracks trigger revenue + growth + reserve + withdrawn totals
+- **Risk Guardrails**: Configurable reserve %, growth exposure cap, volatility limit, and auto-withdraw threshold
+- **Ops Visibility**: Built-in event logs, daily health checks, and simulation output dashboard
+
 ### Progressive Web App
 - **Offline Support**: Service worker enables offline functionality
 - **Installable**: Install as a standalone app on any device

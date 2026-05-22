@@ -79,6 +79,10 @@
                     <span class="tool-icon">🛡️</span>
                     <span class="tool-name">Ad Blocker</span>
                 </button>
+                <button class="tool-item" id="revenueEngineBtn">
+                    <span class="tool-icon">🪙</span>
+                    <span class="tool-name">Revenue Engine</span>
+                </button>
             </div>
         </nav>
 
@@ -685,6 +689,72 @@ console.log('Hello from TimeLord Browser VM!');</textarea>
                         </div>
                     </div>
                 </div>
+
+                <!-- Revenue Engine Panel -->
+                <div class="modal" id="revenueEngineModal">
+                    <div class="modal-content revenue-engine-content">
+                        <div class="modal-header">
+                            <h3>🪙 Perpetual Revenue Engine</h3>
+                            <button class="close-modal" id="closeRevenueEngineModal">✕</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="revenue-engine-grid">
+                                <div class="revenue-card">
+                                    <h4>Live Engine</h4>
+                                    <div class="revenue-stat">Status: <span id="revenueEngineStatus">Running</span></div>
+                                    <div class="revenue-stat">Trigger Events: <span id="revenueEventsCount">0</span></div>
+                                    <div class="revenue-stat">Revenue Earned: <span id="revenueEarned">$0.00</span></div>
+                                    <div class="revenue-stat">Growth Balance: <span id="revenueGrowthBalance">$0.00</span></div>
+                                    <div class="revenue-stat">Reserve Balance: <span id="revenueReserveBalance">$0.00</span></div>
+                                    <div class="revenue-stat">Auto-Withdrawn: <span id="revenueWithdrawn">$0.00</span></div>
+                                    <div class="revenue-stat">Last Health Check: <span id="revenueHealthCheck">Never</span></div>
+                                </div>
+
+                                <div class="revenue-card">
+                                    <h4>Guardrails & Settings</h4>
+                                    <div class="revenue-form-row">
+                                        <label for="revenueCompoundingSeconds">Compounding Interval (seconds)</label>
+                                        <input type="number" id="revenueCompoundingSeconds" min="5" value="60">
+                                    </div>
+                                    <div class="revenue-form-row">
+                                        <label for="revenueReservePercent">Reserve % of each dime</label>
+                                        <input type="number" id="revenueReservePercent" min="0" max="100" value="40">
+                                    </div>
+                                    <div class="revenue-form-row">
+                                        <label for="revenueRiskCapPercent">Max Growth Exposure %</label>
+                                        <input type="number" id="revenueRiskCapPercent" min="0" max="100" value="60">
+                                    </div>
+                                    <div class="revenue-form-row">
+                                        <label for="revenueVolatilityLimit">Volatility Limit %</label>
+                                        <input type="number" id="revenueVolatilityLimit" min="10" value="250">
+                                    </div>
+                                    <div class="revenue-form-row">
+                                        <label for="revenueAutoWithdraw">Auto-Withdraw Threshold ($)</label>
+                                        <input type="number" id="revenueAutoWithdraw" min="1" value="500">
+                                    </div>
+                                    <button id="saveRevenueSettingsBtn" class="primary-btn">Save Settings</button>
+                                </div>
+                            </div>
+
+                            <div class="revenue-card">
+                                <h4>Simulation</h4>
+                                <div class="revenue-form-row">
+                                    <label for="revenueSimulationMinutes">Project over minutes</label>
+                                    <input type="number" id="revenueSimulationMinutes" min="1" value="60">
+                                </div>
+                                <button id="runRevenueSimulationBtn" class="secondary-btn">Run Simulation</button>
+                                <pre class="revenue-simulation-output" id="revenueSimulationOutput">Simulation not run yet.</pre>
+                            </div>
+
+                            <div class="revenue-card">
+                                <h4>Operational Logs</h4>
+                                <div class="revenue-log" id="revenueLog">
+                                    <div class="empty-state-text">No log entries yet</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1019,5 +1089,6 @@ console.log('Hello from TimeLord Browser VM!');</textarea>
     <script src="splitview.js"></script>
     <script src="downloadmanager.js"></script>
     <script src="advancedtools.js"></script>
+    <script src="revenueengine.js"></script>
 </body>
 </html>

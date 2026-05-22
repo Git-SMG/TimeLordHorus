@@ -2694,6 +2694,83 @@ body {
     margin-right: 8px;
 }
 
+/* Revenue Engine */
+.revenue-engine-content {
+    max-width: 900px;
+}
+
+.revenue-engine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.revenue-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 16px;
+}
+
+.revenue-card h4 {
+    margin-bottom: 10px;
+}
+
+.revenue-stat {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.revenue-form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.revenue-form-row label {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.revenue-form-row input {
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 10px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.revenue-log {
+    max-height: 170px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.revenue-log-entry {
+    font-size: 12px;
+    padding: 8px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+}
+
+.revenue-simulation-output {
+    margin-top: 10px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    white-space: pre-wrap;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
 /* Responsive adjustments for new features */
 @media (max-width: 768px) {
     .more-tools-dropdown {
