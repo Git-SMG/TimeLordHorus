@@ -35,6 +35,8 @@ class RevenueEngine {
     }
 
     bindEvents() {
+        this.bindMoreToolsMenu();
+
         const openBtn = document.getElementById('revenueEngineBtn');
         const closeBtn = document.getElementById('closeRevenueEngineModal');
         const modal = document.getElementById('revenueEngineModal');
@@ -64,6 +66,28 @@ class RevenueEngine {
 
         simulateBtn.addEventListener('click', () => {
             this.runSimulation();
+        });
+    }
+
+    bindMoreToolsMenu() {
+        const trigger = document.getElementById('moreToolsBtn');
+        const dropdown = document.getElementById('moreToolsDropdown');
+        if (!trigger || !dropdown) return;
+
+        trigger.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const isOpen = dropdown.style.display === 'block';
+            dropdown.style.display = isOpen ? 'none' : 'block';
+        });
+
+        dropdown.addEventListener('click', () => {
+            dropdown.style.display = 'none';
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!dropdown.contains(event.target) && event.target !== trigger) {
+                dropdown.style.display = 'none';
+            }
         });
     }
 
