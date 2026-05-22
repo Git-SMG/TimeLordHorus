@@ -101,6 +101,7 @@ class RevenueEngine {
         const seconds = now.getSeconds();
         const secondKey = `${now.getHours()}:${now.getMinutes()}:${seconds}`;
 
+        // Trigger only when seconds end in 9: 9, 19, 29, 39, 49, 59 (6x per minute).
         if (seconds % 10 === 9 && this.processedSecondKey !== secondKey) {
             this.processedSecondKey = secondKey;
             this.onRevenueTrigger(now.getTime());
@@ -151,7 +152,8 @@ class RevenueEngine {
             return;
         }
 
-        const growthDeltaPercent = 200;
+        const multiplier = 3;
+        const growthDeltaPercent = (multiplier - 1) * 100;
         if (growthDeltaPercent > this.state.config.volatilityLimitPercent) {
             this.state.volatilityBlocks += 1;
             this.log('Compounding paused by volatility guardrail.');
@@ -159,10 +161,12 @@ class RevenueEngine {
             return;
         }
 
-        this.state.growthBalanceCents = Math.min(
-            Number.MAX_SAFE_INTEGER,
-            this.state.growthBalanceCents * 3
-        );
+        if (this.state.growthBalanceCents > Number.MAX_SAFE_INTEGER / multiplier) {
+            this.state.growthBalanceCents = Number.MAX_SAFE_INTEGER;
+            this.log('Compounding capped at MAX_SAFE_INTEGER to avoid overflow.');
+        } else {
+            this.state.growthBalanceCents *= multiplier;
+        }
         this.log('Compounding cycle executed: growth balance tripled.');
         this.checkAutoWithdraw();
         this.save();
@@ -231,7 +235,7 @@ class RevenueEngine {
             525600
         );
 
-        const events = minutes * 6;
+        const events = minutes * 6; // 6 trigger events per minute (seconds ending in 9)
         const revenueCents = events * 10;
         const reservePart = Math.round((revenueCents * this.state.config.reservePercent) / 100);
         const growthPart = revenueCents - reservePart;
