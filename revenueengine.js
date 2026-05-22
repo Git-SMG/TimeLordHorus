@@ -1,6 +1,10 @@
 // Revenue Engine - perpetual dime trigger + tripling compounding with guardrails
 class RevenueEngine {
     constructor() {
+        this.MAX_COMPOUNDING_INTERVAL_SECONDS = 86400;
+        this.MAX_SIMULATION_MINUTES = 525600;
+        this.MAX_LOG_ENTRIES = 200;
+        this.STALE_TRIGGER_THRESHOLD_SECONDS = 70;
         this.storageKey = 'timelord_revenue_engine';
         this.processedSecondKey = null;
         this.state = {
@@ -102,7 +106,7 @@ class RevenueEngine {
         const secondKey = `${now.getHours()}:${now.getMinutes()}:${seconds}`;
 
         // Trigger when seconds end in 9 (at :09, :19, :29, :39, :49, :59), which is 6x per minute.
-        if (seconds % 10 === 9 && this.processedSecondKey !== secondKey) {
+        if (this.shouldTriggerRevenue(seconds) && this.processedSecondKey !== secondKey) {
             this.processedSecondKey = secondKey;
             this.onRevenueTrigger(now.getTime());
         }
@@ -164,9 +168,12 @@ class RevenueEngine {
         if (this.state.growthBalanceCents > Number.MAX_SAFE_INTEGER / multiplier) {
             this.state.growthBalanceCents = Number.MAX_SAFE_INTEGER;
             this.log('Compounding capped at MAX_SAFE_INTEGER to avoid overflow.');
-        } else {
-            this.state.growthBalanceCents *= multiplier;
+            this.log('Compounding cycle executed with safety cap.');
+            this.checkAutoWithdraw();
+            this.save();
+            return;
         }
+        this.state.growthBalanceCents *= multiplier;
         this.log('Compounding cycle executed: growth balance tripled.');
         this.checkAutoWithdraw();
         this.save();
@@ -200,7 +207,7 @@ class RevenueEngine {
             ? Math.floor((Date.now() - this.state.lastTriggerAt) / 1000)
             : null;
 
-        if (staleSeconds !== null && staleSeconds > 70) {
+        if (staleSeconds !== null && staleSeconds > this.STALE_TRIGGER_THRESHOLD_SECONDS) {
             this.log('Health check warning: trigger appears stale.');
         } else {
             this.log('Health check passed.');
@@ -216,7 +223,7 @@ class RevenueEngine {
         const volatilityLimitPercent = Number.parseInt(document.getElementById('revenueVolatilityLimit')?.value || '250', 10);
         const autoWithdrawDollars = Number.parseFloat(document.getElementById('revenueAutoWithdraw')?.value || '500');
 
-        this.state.config.compoundingIntervalSeconds = this.clamp(compoundingSeconds, 5, 86400);
+        this.state.config.compoundingIntervalSeconds = this.clamp(compoundingSeconds, 5, this.MAX_COMPOUNDING_INTERVAL_SECONDS);
         this.state.config.reservePercent = this.clamp(reservePercent, 0, 100);
         this.state.config.riskCapPercent = this.clamp(riskCapPercent, 0, 100);
         this.state.config.volatilityLimitPercent = this.clamp(volatilityLimitPercent, 10, 1000);
@@ -232,7 +239,7 @@ class RevenueEngine {
         const minutes = this.clamp(
             Number.parseInt(document.getElementById('revenueSimulationMinutes')?.value || '60', 10),
             1,
-            525600
+            this.MAX_SIMULATION_MINUTES
         );
 
         const events = minutes * 6; // 6 trigger events per minute (seconds ending in 9)
@@ -310,6 +317,10 @@ class RevenueEngine {
         return Math.min(max, Math.max(min, value));
     }
 
+    shouldTriggerRevenue(seconds) {
+        return seconds % 10 === 9;
+    }
+
     setText(id, text) {
         const element = document.getElementById(id);
         if (element) element.textContent = text;
@@ -323,8 +334,8 @@ class RevenueEngine {
     log(message) {
         const stamp = new Date().toLocaleString();
         this.state.logs.push(`[${stamp}] ${message}`);
-        if (this.state.logs.length > 200) {
-            this.state.logs = this.state.logs.slice(-200);
+        if (this.state.logs.length > this.MAX_LOG_ENTRIES) {
+            this.state.logs = this.state.logs.slice(-this.MAX_LOG_ENTRIES);
         }
     }
 
