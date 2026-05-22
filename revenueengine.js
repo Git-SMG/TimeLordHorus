@@ -1,6 +1,10 @@
 // Revenue Engine - perpetual dime trigger + tripling compounding with guardrails
 class RevenueEngine {
     constructor() {
+        this.TICK_INTERVAL_MS = 250;
+        this.REVENUE_PER_TRIGGER_CENTS = 10;
+        this.COMPOUNDING_MULTIPLIER = 3;
+        this.TRIGGERS_PER_MINUTE = 6;
         this.MAX_COMPOUNDING_INTERVAL_SECONDS = 86400;
         this.MAX_SIMULATION_MINUTES = 525600;
         this.MAX_LOG_ENTRIES = 200;
@@ -97,7 +101,7 @@ class RevenueEngine {
 
     startScheduler() {
         this.tick();
-        this.intervalId = setInterval(() => this.tick(), 250);
+        this.intervalId = setInterval(() => this.tick(), this.TICK_INTERVAL_MS);
     }
 
     tick() {
@@ -123,7 +127,7 @@ class RevenueEngine {
     }
 
     onRevenueTrigger(timestamp) {
-        const incomeCents = 10;
+        const incomeCents = this.REVENUE_PER_TRIGGER_CENTS;
         const reserveFromIncome = Math.round((incomeCents * this.state.config.reservePercent) / 100);
         let growthFromIncome = incomeCents - reserveFromIncome;
         let reserveFinal = reserveFromIncome;
@@ -156,7 +160,7 @@ class RevenueEngine {
             return;
         }
 
-        const multiplier = 3;
+        const multiplier = this.COMPOUNDING_MULTIPLIER;
         const growthDeltaPercent = (multiplier - 1) * 100;
         if (growthDeltaPercent > this.state.config.volatilityLimitPercent) {
             this.state.volatilityBlocks += 1;
@@ -242,7 +246,7 @@ class RevenueEngine {
             this.MAX_SIMULATION_MINUTES
         );
 
-        const events = minutes * 6; // 6 trigger events per minute (seconds ending in 9)
+        const events = minutes * this.TRIGGERS_PER_MINUTE;
         const revenueCents = events * 10;
         const reservePart = Math.round((revenueCents * this.state.config.reservePercent) / 100);
         const growthPart = revenueCents - reservePart;
@@ -250,11 +254,11 @@ class RevenueEngine {
         let projectedGrowth = growthPart;
         if (this.state.config.volatilityLimitPercent >= 200) {
             for (let i = 0; i < compoundingCycles; i += 1) {
-                if (projectedGrowth > Number.MAX_SAFE_INTEGER / 3) {
+                if (projectedGrowth > Number.MAX_SAFE_INTEGER / this.COMPOUNDING_MULTIPLIER) {
                     projectedGrowth = Number.MAX_SAFE_INTEGER;
                     break;
                 }
-                projectedGrowth *= 3;
+                projectedGrowth *= this.COMPOUNDING_MULTIPLIER;
                 if (projectedGrowth >= Number.MAX_SAFE_INTEGER) break;
             }
         }
@@ -313,11 +317,12 @@ class RevenueEngine {
     }
 
     clamp(value, min, max) {
-        if (value == null || Number.isNaN(value)) return min;
+        if (value === null || value === undefined || Number.isNaN(value)) return min;
         return Math.min(max, Math.max(min, value));
     }
 
     shouldTriggerRevenue(seconds) {
+        // Trigger at 09, 19, 29, 39, 49, and 59 seconds each minute.
         return seconds % 10 === 9;
     }
 
