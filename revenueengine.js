@@ -101,7 +101,7 @@ class RevenueEngine {
         const seconds = now.getSeconds();
         const secondKey = `${now.getHours()}:${now.getMinutes()}:${seconds}`;
 
-        // Trigger only when seconds end in 9: 9, 19, 29, 39, 49, 59 (6x per minute).
+        // Trigger when seconds end in 9 (at :09, :19, :29, :39, :49, :59), which is 6x per minute.
         if (seconds % 10 === 9 && this.processedSecondKey !== secondKey) {
             this.processedSecondKey = secondKey;
             this.onRevenueTrigger(now.getTime());
@@ -243,7 +243,11 @@ class RevenueEngine {
         let projectedGrowth = growthPart;
         if (this.state.config.volatilityLimitPercent >= 200) {
             for (let i = 0; i < compoundingCycles; i += 1) {
-                projectedGrowth = Math.min(Number.MAX_SAFE_INTEGER, projectedGrowth * 3);
+                if (projectedGrowth > Number.MAX_SAFE_INTEGER / 3) {
+                    projectedGrowth = Number.MAX_SAFE_INTEGER;
+                    break;
+                }
+                projectedGrowth *= 3;
                 if (projectedGrowth >= Number.MAX_SAFE_INTEGER) break;
             }
         }
@@ -251,7 +255,7 @@ class RevenueEngine {
         const projectedTotal = reservePart + projectedGrowth;
         const output = [
             `Projection window: ${minutes} minute(s)`,
-            `Clock-hit events (seconds 9,19,29,39,49,59): ${events}`,
+            `Clock-hit events (seconds 9, 19, 29, 39, 49, 59): ${events}`,
             `Raw trigger revenue: ${this.formatCents(revenueCents)}`,
             `Compounding cycles: ${compoundingCycles}`,
             `Projected growth stream: ${this.formatCents(projectedGrowth)}`,
@@ -302,7 +306,7 @@ class RevenueEngine {
     }
 
     clamp(value, min, max) {
-        if (Number.isNaN(value)) return min;
+        if (value == null || Number.isNaN(value)) return min;
         return Math.min(max, Math.max(min, value));
     }
 
