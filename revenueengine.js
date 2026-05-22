@@ -259,7 +259,6 @@ class RevenueEngine {
                     break;
                 }
                 projectedGrowth *= this.COMPOUNDING_MULTIPLIER;
-                if (projectedGrowth >= Number.MAX_SAFE_INTEGER) break;
             }
         }
 
